@@ -12,7 +12,6 @@ exports.getHomepage = async (req,res) =>{
 exports.registerController = async (req,res) =>{
     try {
         // res.send("Register page");
-
         const {username, email, password} = req.body;
         if(!username || !email || !password){
             return res.status(400).send({
