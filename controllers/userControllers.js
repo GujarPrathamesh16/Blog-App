@@ -9,11 +9,12 @@ exports.getHomepage = async (req,res) =>{
     }
 };
 
+
 exports.registerController = async (req,res) =>{
     try {
-        // res.send("Register page");
-        const {username, email, password} = req.body;
-        if(!username || !email || !password){
+        const {firstName, lastName, email, password} = req.body;
+
+        if(!firstName || !lastName || !email || !password){
             return res.status(400).send({
                 success : false,
                 message : 'Please fill all fields'
@@ -29,10 +30,8 @@ exports.registerController = async (req,res) =>{
         }
 
         //all cond satisfied => saving user in db.
-        const user = new userModel({username, email, password});
+        const user = new userModel({firstName, lastName, email, password});
         await user.save();
-
-
         return res.status(201).send({
             success : true,
             message : 'New user Created!',
@@ -63,8 +62,15 @@ exports.getAllUsers = async (req,res) =>{
 
 exports.loginController = async (req,res) =>{
     try {
-        res.send("Login page");
-        console.log("Post req woring for Login");
+        const {email, password} = req.body;
+ 
+        const user = await userModel.findOne({email});
+        if(!user && user.password != password){
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        return res.json({ message: 'Login successful', user });
+
     } catch (error) {
         console.log(error)
     }
