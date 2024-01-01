@@ -1,7 +1,6 @@
 const express = require('express')
 const cors  = require('cors')
 const morgan = require('morgan')
-const colors  = require('colors');
 const dotenv = require('dotenv');
 const { mongoose } = require('mongoose');
 const connectDB = require('./config/db');
@@ -12,6 +11,7 @@ dotenv.config()
 
 //router import 
 const userRoutes = require('./routes/userRoutes')
+const blogRoutes = require('./routes/blogRoutes')
 
 
 //mongoDB connection
@@ -29,6 +29,7 @@ app.use(morgan('dev'));
 
 //routes
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/blog", blogRoutes);
 // app.use('/', require('./routes/userRoutes'))
 
 

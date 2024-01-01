@@ -15,7 +15,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import {authActions} from '../redux/store';
 
 function Copyright(props) {
     return (
@@ -34,6 +35,8 @@ const defaultTheme = createTheme();
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     const [loginData, setLoginData] = useState({
         email: '',
@@ -51,7 +54,11 @@ const Login = () => {
             const response = await axios.post('http://localhost:8080/api/v1/user/login', loginData);
        
             if (response) {
+                dispatch(authActions.login()); //to change redux state on login to show menu
                 console.log('Login successful', response.data);
+                localStorage.setItem("userId", response.data.user._id);
+      
+                alert("Login Successfull");
                 navigate('/blogs')
             }
         } catch (error) {

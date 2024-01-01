@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel')
+const bcrypt = require('bcrypt');
 
 exports.getHomepage = async (req,res) =>{
     try {
@@ -30,7 +31,9 @@ exports.registerController = async (req,res) =>{
         }
 
         //all cond satisfied => saving user in db.
-        const user = new userModel({firstName, lastName, email, password});
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new userModel({firstName, lastName, email, password : hashedPassword});
         await user.save();
         return res.status(201).send({
             success : true,
@@ -63,14 +66,37 @@ exports.getAllUsers = async (req,res) =>{
 exports.loginController = async (req,res) =>{
     try {
         const {email, password} = req.body;
- 
-        const user = await userModel.findOne({email});
-        if(!user && user.password != password){
-            return res.status(401).json({ error: 'Invalid email or password' });
+
+        if(!email || !password){
+            return res.status(401).send({
+                success : false,
+                message : 'Please provide email or password'
+            })
         }
 
-        return res.json({ message: 'Login successful', user });
+        const user = await userModel.findOne({email});
 
+        if(!user){
+            return res.status(200).send({
+                success : false,
+                message : 'User not registered'
+            })
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if(!isMatch){
+            return res.status(401).send({
+                success : false,
+                message : 'Wrong email or password'
+            })
+        }
+
+        return res.status(200).send({
+            success : true,
+            message : 'Login Successfull',
+            user
+        })
     } catch (error) {
         console.log(error)
     }

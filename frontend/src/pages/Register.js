@@ -54,6 +54,7 @@ const Register = () => {
             const response = await axios.post('http://localhost:8080/api/v1/user/register', formData);
             if(response){
                 console.log('Data sent successfully', response.data);
+                alert("Registration Successfull");
                 navigate('/login');
             }
 
