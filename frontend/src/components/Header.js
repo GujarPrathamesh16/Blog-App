@@ -3,13 +3,16 @@ import { Box, AppBar, Toolbar, Button, Typography, Tabs, Tab } from '@mui/materi
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { authActions } from '../redux/store'
- import { useNavigate } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast';
 
 
 const Header = () => {
   //global state
-  const isLogin = useSelector(state => state.isLogin);
+  let isLogin = useSelector(state => state.isLogin);
+  isLogin = isLogin || localStorage.getItem("userId");
+
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,18 +21,23 @@ const Header = () => {
   const handleLogout = () =>{
     try {
       dispatch(authActions.logout())
-      alert("Logout Successfull");
+      toast.success("Logout Successfull");
+      localStorage.clear();
       navigate('/login')
     } catch (error) {
       console.log(error)
     }
   }
 
+  const handleClick = () =>{
+    navigate('/');
+  }
+
   return (
     <>
       <AppBar position='sticky'>
         <Toolbar>
-          <Typography variant='h4'>My Blog App</Typography>
+          <Typography variant='h4' onClick = {handleClick}>Blogger</Typography>
 
           {isLogin && (
             <Box display={"flex"} marginLeft="auto" marginRight={'auto'}>

@@ -9,13 +9,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import {authActions} from '../redux/store';
+import toast from 'react-hot-toast';
 
 const defaultTheme = createTheme();
 const CreateBlog = () => {
+
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const id = localStorage.getItem('userId');
     
@@ -37,7 +36,7 @@ const CreateBlog = () => {
         try {
             const response = await axios.post('http://localhost:8080/api/v1/blog/create-blog', inputs);
             if (response) {
-                alert("Blog created Successfull");
+                toast.success("Blog created Successfull");
                 navigate('/my-blogs');
             }
         } catch (error) {

@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -15,6 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 function Copyright(props) {
     return (
@@ -54,11 +53,12 @@ const Register = () => {
             const response = await axios.post('http://localhost:8080/api/v1/user/register', formData);
             if(response){
                 console.log('Data sent successfully', response.data);
-                alert("Registration Successfull");
+                toast.success("Registration Successfull");
                 navigate('/login');
             }
 
           } catch (error) {
+            toast.error(error.response.data.message);
             console.log(error);
           }
     };
@@ -131,12 +131,6 @@ const Register = () => {
                                     value={formData.password}
                                     autoComplete="new-password"
                                     onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
                                 />
                             </Grid>
                         </Grid>

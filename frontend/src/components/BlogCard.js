@@ -9,7 +9,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 import { Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 
 export default function RecipeReviewCard({ blogId, isUser, title, description, image, name, time }) {
@@ -32,8 +33,11 @@ export default function RecipeReviewCard({ blogId, isUser, title, description, i
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:8080/api/v1/blog/delete-blog?id=${blogId}`)
-      // console.log("Delete response = ", response);
+      const response = await axios.delete(`http://localhost:8080/api/v1/blog/delete-blog?id=${blogId}`);
+      console.log(response);
+      toast.error("Blog deleted successfully");
+      window.location.reload();
+      
     } catch (error) {
       console.log(error);
     }

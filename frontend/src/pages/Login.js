@@ -16,7 +16,11 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {authActions} from '../redux/store';
+import { authActions } from '../redux/store';
+import toast from 'react-hot-toast';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 
 function Copyright(props) {
     return (
@@ -52,22 +56,26 @@ const Login = () => {
 
         try {
             const response = await axios.post('http://localhost:8080/api/v1/user/login', loginData);
-       
+
             if (response) {
                 dispatch(authActions.login()); //to change redux state on login to show menu
                 console.log('Login successful', response.data);
                 localStorage.setItem("userId", response.data.user._id);
-      
-                alert("Login Successfull");
+                toast.success("Login Successfull");
                 navigate('/blogs')
             }
         } catch (error) {
+            toast.error(error.response.data.message);
             console.error('Error during login', error.message);
+            // setLoginData({ email: '', password: '' });
         }
     };
 
     return (
+
         <ThemeProvider theme={defaultTheme}>
+
+
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -127,9 +135,21 @@ const Login = () => {
                             </Grid>
                             {/* <Grid item>
                                 <Link href="#" variant="body2">
-                                    {"Don't have an account? Sign Up"}
+                                {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid> */}
+                            {/* <GoogleOAuthProvider clientId={process.env.clientId}>
+                                <GoogleLogin
+                                    onSuccess={credentialResponse => {
+                                        const details = jwtDecode(credentialResponse.credential);
+                                        console.log(details);
+                                        console.log(credentialResponse);
+                                    }}
+                                    onError={() => {
+                                        console.log('Login Failed');
+                                    }}
+                                />
+                            </GoogleOAuthProvider> */}
                             <Button onClick={() => navigate("/register")} sx={{ borderRadius: 3, marginTop: 3 }}>
                                 Don't have an account? Sign Up
                             </Button>

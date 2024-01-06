@@ -9,6 +9,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate,  useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const defaultTheme = createTheme();
 
@@ -38,7 +39,7 @@ const BlogDetails = () => {
       try {
           const response = await axios.put('http://localhost:8080/api/v1/blog/update-blog', inputs);
           if (response) {
-              alert("Blog updated Successfull");
+              toast.success("Blog updated Successfull");
               navigate('/my-blogs');
           }
       } catch (error) {

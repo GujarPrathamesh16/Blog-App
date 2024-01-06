@@ -7,7 +7,6 @@ const router = express.Router()
 //Homepage
 router.get('/', getHomepage);
 
-
 // create user
 router.post('/register', registerController)
 
