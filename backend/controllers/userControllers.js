@@ -22,11 +22,21 @@ exports.registerController = async (req,res) =>{
             })
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            return res.status(400).send({ 
+                success: false, 
+                message: 'Invalid email address' 
+            });
+        }
+
+
         const existingUser = await userModel.findOne({email})
         if(existingUser){
             return res.status(401).send({
                 success : false,
-                message : 'User already exists'
+                message : 'Email already exists'
             })
         }
 
@@ -77,7 +87,7 @@ exports.loginController = async (req,res) =>{
         const user = await userModel.findOne({email});
 
         if(!user){
-            return res.status(200).send({
+            return res.status(401).send({
                 success : false,
                 message : 'User not registered'
             })
@@ -85,7 +95,7 @@ exports.loginController = async (req,res) =>{
 
         const isMatch = await bcrypt.compare(password, user.password);
 
-        if(!isMatch){
+        if(!user || !isMatch){
             return res.status(401).send({
                 success : false,
                 message : 'Wrong email or password'
@@ -97,6 +107,7 @@ exports.loginController = async (req,res) =>{
             message : 'Login Successfull',
             user
         })
+
     } catch (error) {
         console.log(error)
     }

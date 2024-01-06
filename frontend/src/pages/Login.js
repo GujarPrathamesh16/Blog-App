@@ -18,9 +18,9 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../redux/store';
 import toast from 'react-hot-toast';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
+// import { GoogleOAuthProvider } from '@react-oauth/google';
+// import { GoogleLogin } from '@react-oauth/google';
+// import { jwtDecode } from "jwt-decode";
 
 function Copyright(props) {
     return (

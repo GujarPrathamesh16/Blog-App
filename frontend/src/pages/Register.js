@@ -110,6 +110,7 @@ const Register = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
+                                    type="email"
                                     required
                                     fullWidth
                                     id="email"
